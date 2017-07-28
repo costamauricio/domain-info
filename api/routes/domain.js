@@ -2,6 +2,7 @@
 
 const Router = require('koa-router');
 const whois = require('lib/whois');
+const db = require('db');
 
 const router = new Router({
   prefix: '/domain'
@@ -10,7 +11,7 @@ const router = new Router({
 router.get('/:domain', async (ctx) => {
 
   let info = await whois.getInformation(ctx.params.domain);
-  
+
   ctx.body = {
     info: info
   };

@@ -12,7 +12,7 @@ const db = require('db');
 
 (async () => {
 
-  api.use(serve('./public'));
+  api.use(serve('./dist'));
 
   try {
     await db.connect(config.db.port, config.db.host);

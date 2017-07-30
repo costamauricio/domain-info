@@ -12,6 +12,7 @@ const router = new Router({
 
 // load domain routes
 router.use( require('./routes/domain').routes() );
+router.use( require('./routes/ip').routes() );
 
 app.use(router.routes());
 

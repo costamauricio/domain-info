@@ -10,9 +10,7 @@ module.exports = {
 
   client: null,
 
-  /**
-   * Connect to redis server
-   */
+  // connect to redis server
   connect(port, host) {
 
     return new Promise((resolve, reject) => {
@@ -28,11 +26,13 @@ module.exports = {
     });
   },
 
+  // check if a key exists to a hash
   async exists(hash, key) {
     let exists = await this.client.hexistsAsync(hash, key);
     return exists == 1;
   },
 
+  // set a key to a hash
   async set(hash, key, value) {
 
     if (typeof value == 'object')
@@ -41,6 +41,7 @@ module.exports = {
     return await this.client.hsetAsync(hash, key, value);
   },
 
+  // get a key from a hash
   async get(hash, key) {
     let value = await this.client.hgetAsync(hash, key);
 

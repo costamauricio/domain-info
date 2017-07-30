@@ -12,6 +12,9 @@ module.exports = Object.freeze({
     port: process.env.REDIS_PORT
   },
   whois: {
-    main: process.env.MAIN_WHOIS_REQUEST || 'whois.iana.org'
+    main: process.env.MAIN_WHOIS_SERVER || 'whois.iana.org'
+  },
+  dns: {
+    main: process.env.MAIN_DNS_SERVER || '8.8.8.8'
   }
 });

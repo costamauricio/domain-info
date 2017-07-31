@@ -19,8 +19,10 @@
 
 ## Executando Local
 
-* Configurar os dados de conexão com o banco no arquivo .env
+* Criar arquivo .env na raiz do repositório e configurar os dados de conexão
 ```
+NODE_PORT=8081
+
 REDIS_HOST=
 REDIS_PORT=
 ```

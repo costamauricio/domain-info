@@ -5,6 +5,8 @@ services:
     volumes:
       - .:/home/app
     working_dir: /home/app
+    depends_on:
+      - "redis"
     ports:
       - 8081:80
     environment:

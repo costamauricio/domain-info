@@ -13,22 +13,27 @@
           md-flex-xlarge="33"
           >
           <md-whiteframe class="frame">
-            <form novalidate @submit.stop.prevent="lookup">
+            <form @submit.stop.prevent="lookup">
               <md-input-container>
                 <label>Domínio ou IP (v4, v6)</label>
                 <md-input
                   v-model="domain"
+                  required
                   name="domain"
                 ></md-input>
               </md-input-container>
               <md-layout md-align="end">
-                <md-button class="md-raised md-primary" v-on:click="lookup">Buscar</md-button>
+                <md-button type="submit" class="md-raised md-primary">Buscar</md-button>
               </md-layout>
             </form>
           </md-whiteframe>
         </md-layout>
       </md-layout>
-      {{ error }}
+
+      <md-layout v-if="error" md-flex md-row md-align="center">
+        <span id="error" class="md-headline">{{ error }}</span>
+      </md-layout>
+
       <md-layout md-flex md-row md-align="center">
         <md-layout
             md-flex
@@ -53,6 +58,10 @@
             <div v-if="content.dns && content.dns.AAAA">
               <span class="md-display-1">IPv6:</span>
               <span class="md-title">{{ joinItems(content.dns.AAAA) }}</span>
+            </div>
+            <div v-if="content.dns && content.dns.CNAME">
+              <span class="md-display-1">CNAME:</span>
+              <span class="md-title">{{ joinItems(content.dns.CNAME) }}</span>
             </div>
             <div v-if="content.dns && content.dns.NS">
               <span class="md-display-1">Name Servers:</span>
@@ -111,13 +120,14 @@ export default {
 
       let endpoint = 'domain'
 
+      // check if it's an IP
       if (this.domain.match(/^((\d{1,3}\.){3}\d{1,3}|([a-f0-9A-F]{0,4}\:){1,7}([a-f0-9A-F]{0,4})?)$/))
         endpoint = 'ip'
 
       this.loading = true
       this.error = null
 
-      axios.get('api/' + endpoint + '/' + this.domain)
+      axios.get('api/' + endpoint + '/' + encodeURIComponent(this.domain))
         .then((data) => {
           this.content = data.data
           this.loading = false
@@ -158,6 +168,11 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#error {
+  color: red;
+  padding: 1em;
 }
 
 .frame {

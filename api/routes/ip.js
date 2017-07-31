@@ -1,6 +1,7 @@
 'use-strict';
 
 const Router = require('koa-router');
+const boom = require('koa-boom')();
 const whois = require('lib/whois');
 const db = require('db');
 
@@ -10,8 +11,12 @@ const router = new Router({
 
 router.get('/:ip', async (ctx) => {
 
-  let ip = ctx.params.ip.toLowerCase(),
-      whoisServer = await whois.getServer(ip);
+  // check domain
+  if (ctx.params.ip.trim() == '')
+    return boom.badRequest(ctx);
+
+  let ip = ctx.params.ip.trim().toLowerCase(),
+    whoisServer = await whois.getServer(ip);
 
   let details = {};
 

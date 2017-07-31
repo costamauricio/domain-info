@@ -36,7 +36,7 @@ module.exports = {
   async set(hash, key, value) {
 
     if (typeof value == 'object')
-      value = JSON.stringify(value)
+      value = JSON.stringify(value);
 
     return await this.client.hsetAsync(hash, key, value);
   },

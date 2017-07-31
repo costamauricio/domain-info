@@ -10,7 +10,7 @@ const router = new Router({
   prefix: '/api'
 });
 
-// load domain routes
+// load routes
 router.use( require('./routes/domain').routes() );
 router.use( require('./routes/ip').routes() );
 

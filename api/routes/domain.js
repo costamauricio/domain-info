@@ -1,6 +1,7 @@
 'use-strict';
 
 const Router = require('koa-router');
+const boom = require('koa-boom')();
 const whois = require('lib/whois');
 const dns = require('lib/dns');
 const db = require('db');
@@ -11,9 +12,19 @@ const router = new Router({
 
 router.get('/:domain', async (ctx) => {
 
-  let param = ctx.params.domain.trim().replace(/^(http:\/\/)?(www\.)?/, '').replace(/\/?$/, '').toLowerCase(),
-      domain = param.match(/\.([a-zA-Z]+)$/),
-      whoisServer = null;
+  // check domain
+  if (ctx.params.domain.trim() == '')
+    return boom.badRequest(ctx);
+
+  let param = ctx.params.domain.trim().replace(/^([a-zA-Z]{1,4}:\/\/)?/, '').replace(/\/.*$/, '').toLowerCase(),
+    domain = param.match(/\.([a-zA-Z]+)$/),
+    whoisServer = null;
+
+  // check if the domain is a CNAME
+  let cname = await dns.getCname(param);
+
+  if (cname || param.match(/^www\./))
+    param = param.replace(/^[a-zA-Z0-9]+\./, '');
 
   // check on redis for the domain whois server
   if (domain && await db.exists('server', domain[1]))
@@ -24,7 +35,7 @@ router.get('/:domain', async (ctx) => {
     whoisServer = await whois.getServer(param);
 
     if (!whoisServer)
-      return ctx.status = 500;
+      return boom.badImplementation(ctx);
 
     await db.set('server', whoisServer.domain.toLowerCase(), whoisServer);
   }
@@ -45,8 +56,10 @@ router.get('/:domain', async (ctx) => {
   }
 
   // find dns information for the domain
-  if (details.domain.name)
+  if (details.domain.name) {
     details.dns = await dns.getDetails(param);
+    details.dns.CNAME = cname;
+  }
 
   ctx.body = details;
 });

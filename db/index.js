@@ -11,10 +11,10 @@ module.exports = {
   client: null,
 
   // connect to redis server
-  connect(port, host) {
+  connect(port, host, url = null) {
 
     return new Promise((resolve, reject) => {
-      this.client = redis.createClient(port, host);
+      this.client = url ? redis.createClient(url) : redis.createClient(port, host);
 
       this.client.on('connect', () => {
         resolve();

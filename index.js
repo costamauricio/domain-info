@@ -15,7 +15,7 @@ const db = require('db');
   api.use(serve('./dist'));
 
   try {
-    await db.connect(config.db.port, config.db.host);
+    await db.connect(config.db.port, config.db.host, config.db.url);
   } catch (err) {
     console.log('Database error:', err);
     process.exit();

@@ -10,6 +10,7 @@
   "rules": {
     "no-unused-vars": 1,
     "no-console": 0,
+    "no-empty": 1,
     "indent": [
       "error",
       2

@@ -1,0 +1,20 @@
+version: '2'
+services:
+  app:
+    image: node:alpine
+    volumes:
+      - .:/home/app
+    working_dir: /home/app
+    ports:
+      - 8081:80
+    environment:
+      NODE_PORT: 80
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+    entrypoint:
+      - npm
+      - start
+  redis:
+    image: redis:alpine
+    ports:
+     - "6379:6379"

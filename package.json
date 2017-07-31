@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "production": false
+  },
   "engines": {
     "node": ">=7.6"
   },
   "scripts": {
     "start": "NODE_PATH=. node index.js",
+    "build": "npm run build-prod",
     "build-dev": "./node_modules/.bin/webpack",
     "build-prod": "NODE_ENV=production ./node_modules/.bin/webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
